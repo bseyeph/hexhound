@@ -1,5 +1,16 @@
 # 🐺 HexHound
 
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" />
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue" />
+  <img src="https://github.com/bseyeph/hexhound/actions/workflows/ci.yml/badge.svg" />
+  <img src="https://img.shields.io/badge/status-alpha-orange" />
+  <img src="https://img.shields.io/badge/packaging-poetry-blue" />
+  <img src="https://img.shields.io/badge/frontend-react-61DAFB?logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/styling-tailwindcss-38bdf8?logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/backend-flask-000000?logo=flask&logoColor=white" />
+</p>
+
 HexHound is a blockchain forensics toolkit for tracing tainted funds across wallets in real time.  
 It provides both:
 
