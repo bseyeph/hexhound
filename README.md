@@ -1,4 +1,4 @@
-# 🐺 HexHound
+# 🐺 HexHound — Blockchain Forensics & Scam Investigation Toolkit
 
 <p align="center">
   <img src="https://img.shields.io/badge/License-MIT-green.svg" />
@@ -11,58 +11,48 @@
   <img src="https://img.shields.io/badge/backend-flask-000000?logo=flask&logoColor=white" />
 </p>
 
-HexHound is a blockchain forensics toolkit for tracing tainted funds across wallets in real time.  
-It provides both:
+HexHound is a **high-performance blockchain forensics engine** built for investigators, analysts, and victims of crypto fraud. It performs **taint tracing**, **live monitoring**, and **token-aware analysis** using pure RPC calls — **no API keys and no rate-limited explorer dependencies**.
 
-- A **powerful CLI** (with a Metasploit-style interactive shell)
-- A **local Flask API + React/Tailwind UI**
-- **API-key-free EVM tracing** using pure RPC calls
-- A pluggable architecture for multi-chain support (Bitcoin, Tron, Solana, etc.)
+HexHound is designed for:
 
-HexHound is designed for investigators, incident responders, analysts, and victims of crypto fraud who need to track fund movement *as it happens*.
+- Scam / fraud recovery responders  
+- Internal incident response teams  
+- OSINT & DFIR analysts  
+- Law enforcement digital investigators  
+- Victims seeking transparent tracking of stolen funds  
 
 ---
 
-## ✨ Features
+## ✨ Key Capabilities
 
-### 🔍 Taint Tracing Engine
-- Trace ETH & ERC-20 flows from any wallet or transaction hash  
-- Build a multi-hop taint graph (user-configurable depth)  
-- Follows funds through arbitrarily deep chains of transfers  
-- Extracts ERC-20 `Transfer` events from on-chain logs (no explorer APIs)
+### 🔍 Taint Tracing Engine (High-Speed, Multi-Hop)
+- Trace ETH & ERC-20 flows from any wallet  
+- Multi-hop taint traversal (user-defined depth)  
+- **Adaptive chunking** for extremely fast log scanning  
+- **Parallel RPC execution** for high throughput  
+- Graph-style output (nodes + edges)  
+- Timestamps coming soon  
+
+### 🧪 Token-Aware Forensics (New)
+- Treats each token independently (USDT, stablecoin variants, phishing tokens, dust tokens, etc.)  
+- **Symbol normalization** and **scam-token flagging**  
+- Detects:
+  - Unicode-obfuscated symbols  
+  - Tokens containing phishing text  
+  - Overlong scam-banner names  
+  - URL-like symbols  
+- Produces a clean, analyst-friendly report with inbound/outbound totals and top senders/receivers.
 
 ### 🛰 Sniff Mode (Live Monitoring)
-- Continuously scan new blocks for activity touching tracked addresses  
-- Update a live taint graph as funds move  
-- Ideal for scam recovery and forensic investigations
+- Watches the chain for updates to tracked wallets  
+- Emits new transfers in real time  
 
-### 🐺 Interactive Shell (Metasploit-style)
+### 🐺 Interactive Shell
+A Metasploit-style UI:
 
-Run:
-
-```bash
+```
 hexhound
 ```
-
-You’ll get:
-
-```
-
- /$$   /$$                     /$$   /$$                                     /$$
-| $$  | $$                    | $$  | $$                                    | $$
-| $$  | $$  /$$$$$$  /$$   /$$| $$  | $$  /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$$
-| $$$$$$$$ /$$__  $$|  $$ /$$/| $$$$$$$$ /$$__  $$| $$  | $$| $$__  $$ /$$__  $$
-| $$__  $$| $$$$$$$$ \  $$$$/ | $$__  $$| $$  \ $$| $$  | $$| $$  \ $$| $$  | $$
-| $$  | $$| $$_____/  >$$  $$ | $$  | $$| $$  | $$| $$  | $$| $$  | $$| $$  | $$
-| $$  | $$|  $$$$$$$ /$$/\  $$| $$  | $$|  $$$$$$/|  $$$$$$/| $$  | $$|  $$$$$$$
-|__/  |__/ \_______/|__/  \__/|__/  |__/ \______/  \______/ |__/  |__/ \_______/
-
-                    HexHound - Blockchain Forensics Engine
-HexHound v0.1.0 — type 'help' to list commands.
-HexHound >
-```
-
-Supported commands include:
 
 ```
 add eth-mainnet 0xabc...
@@ -74,21 +64,10 @@ list
 version
 ```
 
----
-
-## 🖥 UI Dashboard
-
-- Next-gen React + Tailwind interface  
-- Displays taint graphs (placeholder now, full graph view coming next)
-- Local backend served via Flask
-
-Start UI:
-
-```bash
-hexhound ui
-```
-
-Default: <http://localhost:8765>
+### 🖥 Local UI Dashboard
+- React + Tailwind  
+- Flask backend  
+- Interactive graph view (coming soon)
 
 ---
 
@@ -110,16 +89,14 @@ hexhound/
 
 ---
 
-## 🚀 Installation (Development)
+## 🚀 Installation
 
-### 1. Install Python dependencies
-
+### Install Python dependencies
 ```bash
 poetry install
 ```
 
-### 2. Install UI dependencies
-
+### Build UI
 ```bash
 cd ui
 npm install
@@ -127,8 +104,7 @@ npm run build
 cd ..
 ```
 
-Copy build output into the Python package:
-
+Copy build output:
 ```bash
 rm -rf hexhound/ui
 mkdir -p hexhound/ui
@@ -139,20 +115,17 @@ cp -r ui/dist/* hexhound/ui/
 
 ## 🧪 Usage
 
-### CLI (non-interactive)
-
+### Trace a wallet
 ```bash
 hexhound trace 0xWallet --depth 3
 ```
 
-### Interactive Shell
-
+### Interactive shell
 ```bash
 hexhound
 ```
 
 ### Launch UI
-
 ```bash
 hexhound ui --port 8765
 ```
@@ -161,56 +134,35 @@ hexhound ui --port 8765
 
 ## 🔧 Configuration
 
-HexHound uses pure RPC.  
-Default RPC endpoint:
-
+Default RPC:
 ```
 https://cloudflare-eth.com
 ```
 
-Override via environment variable:
-
+Override:
 ```bash
 export HEXHOUND_RPC_ETH_MAINNET="https://your-node-endpoint"
 ```
 
 ---
 
-## 📦 Running Tests
-
+## 📦 Tests
 ```bash
 poetry run pytest
 ```
 
 ---
 
-## 🔄 CI/CD
-
-GitHub Actions workflow includes:
-
-- Setup Python  
-- Poetry install  
-- Run test suite  
-
----
-
 ## 🛣 Roadmap
 
-### v0.2 – Native ETH tracing + timestamps  
-### v0.3 – Sniff mode (live updates)  
-### v0.4 – Graph rendering in UI  
-### v0.5 – Bitcoin UTXO tracing  
-### v0.6 – Tron & Solana connectors  
-### v1.0 – Case management + exportable reports  
+### v0.2 — timestamps  
+### v0.3 — full sniff mode  
+### v0.4 — graph rendering UI  
+### v0.5 — Bitcoin UTXO  
+### v0.6 — Tron & Solana  
+### v1.0 — case management + reports  
 
 ---
 
-## 👤 License
-
+## License
 MIT License.
-
----
-
-## 🤝 Contributing
-
-PRs welcome!
