@@ -19,6 +19,8 @@ cmd2 = "^2.5.0"
 Flask = "^3.0.0"
 requests = "^2.32.0"
 rich = "^13.7.0"
+tqdm = "^4.67.1"
+click = "8.1.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"

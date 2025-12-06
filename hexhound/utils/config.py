@@ -10,8 +10,8 @@ STATE_FILE = APP_DIR / "state.json"
 CONFIG_FILE = APP_DIR / "config.toml"
 
 DEFAULT_RPC_ENDPOINTS = {
-    "eth-mainnet": "https://cloudflare-eth.com",
-    "eth": "https://cloudflare-eth.com",
+    "eth-mainnet": "https://1rpc.io/eth",
+    "eth": "https://1rpc.io/eth",
 }
 
 

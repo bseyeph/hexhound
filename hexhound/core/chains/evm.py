@@ -18,36 +18,58 @@ class EvmConnector(ChainConnector):
 
     def trace_from_address(self, address: str, depth: int = 3) -> Dict[str, Any]:
         address = address.lower()
-        tainted = set([address])
-        nodes: Dict[str, Dict[str, Any]] = {
-            address: {"tainted": True, "chain": self.network.name}
-        }
+
+        # caching transfers per address
+        if not hasattr(self, "_cache"):
+            self._cache = {}
+
+        def get_transfers(addr: str):
+            if addr in self._cache:
+                return self._cache[addr]
+            txs = self.provider.get_address_transfers(addr)
+            self._cache[addr] = txs
+            return txs
+
+        tainted = {address}
+        nodes = {address: {"tainted": True, "chain": self.network.name}}
         edges: List[Transfer] = []
 
-        queue: Deque[tuple[str, int]] = deque()
-        queue.append((address, 0))
-        visited: set[str] = set()
+        queue: Deque[tuple[str, int]] = deque([(address, 0)])
+        visited = set()
 
         while queue:
             current, level = queue.popleft()
+
             if level >= depth:
                 continue
             if current in visited:
                 continue
             visited.add(current)
 
-            transfers = self.provider.get_address_transfers(current)
+            transfers = get_transfers(current)
+
+            # NEW: stop deeper traversal if no activity
+            if level == 0 and not transfers:
+                break  # no need to explore deeper levels at all
+
+            if not transfers:
+                continue  # skip deeper hops for empty nodes
+
             for t in transfers:
                 if t.from_addr != current:
                     continue
+
                 edges.append(t)
+
                 if t.to_addr not in nodes:
                     nodes[t.to_addr] = {"tainted": True, "chain": self.network.name}
+
                 if t.to_addr not in tainted:
                     tainted.add(t.to_addr)
                     queue.append((t.to_addr, level + 1))
 
         return {"nodes": nodes, "edges": edges}
+
 
     def trace_from_tx(self, tx_hash: str, depth: int = 3) -> Dict[str, Any]:
         raw_tx = self.provider.get_tx_details(tx_hash)
